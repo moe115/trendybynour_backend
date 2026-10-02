@@ -3,23 +3,13 @@ services:
     build: .
     image: product-backend
     restart: unless-stopped
-    env_file:
-      - var/.env
     environment:
       PORT: 5050
-    ports:
-      - "${API_PORT:-5050}:5050"
-
-  # Optional local MongoDB. Start with: docker compose --profile local-db up
-  # and set MONGODB_URI=mongodb://mongo:27017/products in var/.env.
-  mongo:
-    image: mongo:7
-    profiles: ["local-db"]
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-volumes:
-  mongo-data:
+      MONGODB_URI: ${MONGODB_URI:?}
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID:?}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:?}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:?}
+      R2_BUCKET: ${R2_BUCKET:?}
+      R2_PUBLIC_DOMAIN: ${R2_PUBLIC_DOMAIN:-}
+    expose:
+      - "5050"
